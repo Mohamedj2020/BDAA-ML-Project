@@ -28,11 +28,23 @@ def preprocess_data(df):
     df.drop(columns=["customerID"], inplace=True)
 
     # Encode categorical variables
-    label_encoders = {}
-    for col in df.select_dtypes(include=["object"]).columns:
+    label_encoders = {}  # Store label encoders 
+    for column in df.select_dtypes(include=["object"]).columns:
         le = LabelEncoder()
-        df[col] = le.fit_transform(df[col])
-        label_encoders[col] = le  # Store for later use
+        df[column] = le.fit_transform(df[column])
+        label_encoders[column] = le # Store the label encoder
+        # Convert 'Churn' to binary
+    df["Churn"] = df["Churn"].apply(lambda x: 1 if x == "Yes" else 0)
+    # Convert 'SeniorCitizen' to binary
+    df["SeniorCitizen"] = df["SeniorCitizen"].apply(lambda x: 1 if x == 1 else 0)
+    # Convert 'Partner' to binary
+    df["Partner"] = df["Partner"].apply(lambda x: 1 if x == "Yes" else 0)
+    # Convert 'Dependents' to binary
+    df["Dependents"] = df["Dependents"].apply(lambda x: 1 if x == "Yes" else 0)
+    # Convert 'PhoneService' to binary
+    df["PhoneService"] = df["PhoneService"].apply(lambda x: 1 if x == "Yes" else 0)
+    # Convert 'PaperlessBilling' to binary
+    df["PaperlessBilling"]
 
     return df, label_encoders
 
@@ -96,3 +108,5 @@ predictions_df = pd.DataFrame({
 
 st.write(predictions_df)
 st.write("This table shows a sample of actual vs. predicted customer churn.")
+
+
